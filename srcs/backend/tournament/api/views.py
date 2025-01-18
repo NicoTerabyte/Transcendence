@@ -8,6 +8,13 @@ from .models import Post
 from .serializer import PostSerializer
 from . import matchmaking, debug_print
 
+#* for next time:
+#* i need to change the get to have the matchmaking be there instead of
+#* the post function to be able to get the users and matchmake them and give it
+#* to the frontend
+#* because if you think about it POST is for adding them to the db and then
+#* with GET we can get the users and matchmake them and then DELETE them
+
 @api_view(['GET'])
 def get_users(request):
 	users = User.objects.all()
@@ -62,3 +69,34 @@ class PostList(APIView):
 		serializer = PostSerializer(posts, many=True)
 		return Response(serializer.data)
 
+
+#PUT http request to change the database
+#*based on who won the match
+#*the request is surely the players who lost the match
+#!to finish next time
+@api_view(['DELETE'])
+def update_match_winner(request):
+	# Expecting a JSON array of names: {"names": ["Alice", "Bob"]}
+	print('\033[32m ready to update the match winner \033[0m')
+	print(request.data)
+
+	names = request.data.get('names', [])
+	print(names)
+
+	if not isinstance(names, list):
+		return Response({'error': 'Names must be a list'}, status=status.HTTP_400_BAD_REQUEST)
+
+	# Get the users from the database
+	# and from the name that i have gotten delete the user from the db
+	for name in names:
+		try:
+			user = User.objects.get(name=name)
+			print(f'\033[41mDeleted user {user.name}\033[0m')
+			user.delete()
+		except User.DoesNotExist:
+			return Response({'error': f'User {name} does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+	# Return the updated users
+	users = User.objects.all()
+	serializer = UserSerializer(users, many=True)
+	return Response(serializer.data, status=status.HTTP_200_OK)
