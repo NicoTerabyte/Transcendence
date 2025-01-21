@@ -6,7 +6,7 @@ from .views import save_user_for_tournament, update_match_winner
 #we need to create a url for each operation
 urlpatterns = [
 	path('users/', get_users, name='get_users'),
-	path('users/<int:pk>/', get_users, name='get_user'),
+	path('users/get/', get_users, name='get_user'),
 	path('posts/',PostList.as_view(), name='post_list'),
 	path('users/save/', save_user_for_tournament, name='save_user_for_tournament'),
 	path('users/delete/', update_match_winner, name='update_match_winner'),

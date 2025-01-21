@@ -14,12 +14,26 @@ from . import matchmaking, debug_print
 #* to the frontend
 #* because if you think about it POST is for adding them to the db and then
 #* with GET we can get the users and matchmake them and then DELETE them
+#* [X] DONE :)
 
 @api_view(['GET'])
 def get_users(request):
+	print('\033[32mready to get the users \033[0m')
 	users = User.objects.all()
-	serializer = UserSerializer(users, many=True)
-	return Response(serializer.data)
+	# serializer = UserSerializer(users, many=True)
+	saved_users = []
+	for user in users:
+		saved_users.append(user)
+	if (len(saved_users) % 2 != 0):
+		print("\033[31modd number of users \033[0m")
+		saved_users = matchmaking.remove_user_temporarily(saved_users)
+
+	matchmaked_users = matchmaking.matchmaking(saved_users)
+	debug_print.debug_print_user_matchmaking(matchmaked_users)
+	serializer = UserSerializer(matchmaked_users, many=True)
+	debug_print.debug_print_user_matchmaking(saved_users)
+	debug_print.printUserDb()
+	return Response(serializer.data, status=status.HTTP_200_OK)
 
 #view to save multiple users in case of tournament case
 #until now i haven't worked with databases in django
@@ -28,6 +42,12 @@ def get_users(request):
 #the frontend will use this data to display the users
 #response expects single list of user
 
+
+#! if you think about it, the post request is needed
+#! only once to add the users to the db and that's it
+#! and that time is when in the front end we create the tournament option
+
+#in this case te request are the users to put in the db
 @api_view(['POST'])
 def	save_user_for_tournament(request):
 	# Expecting a JSON array of names: {"names": ["Alice", "Bob", "Charlie"]}
@@ -52,15 +72,7 @@ def	save_user_for_tournament(request):
 			print(f'\033[41mUser {user.name} already exists\033[0m')
 		saved_users.append(user)
 
-	if (len(saved_users) % 2 != 0):
-		print("\033[31modd number of users \033[0m")
-		saved_users = matchmaking.remove_user_temporarily(saved_users)
-
-	matchmaked_users = matchmaking.matchmaking(saved_users)
-	debug_print.debug_print_user_matchmaking(matchmaked_users)
-	serializer = UserSerializer(matchmaked_users, many=True)
-	debug_print.debug_print_user_matchmaking(saved_users)
-	debug_print.printUserDb()
+	serializer = UserSerializer(saved_users, many=True)
 	return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class PostList(APIView):
@@ -73,7 +85,6 @@ class PostList(APIView):
 #PUT http request to change the database
 #*based on who won the match
 #*the request is surely the players who lost the match
-#!to finish next time
 @api_view(['DELETE'])
 def update_match_winner(request):
 	# Expecting a JSON array of names: {"names": ["Alice", "Bob"]}
