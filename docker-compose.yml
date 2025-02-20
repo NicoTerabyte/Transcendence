@@ -1,0 +1,58 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+
+
+  # Postgres database
+  tournament_db:
+    container_name: tournament
+    build: .
+    image: tournament
+    depends_on:
+      - container_postgres
+    networks:
+      - internal
+    ports:
+      - "8001:8001"
+
+
+
+  container_postgres:
+    container_name: container_postgres
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    restart: unless-stopped
+    #after remove ports and leave only network
+    ports:
+      - "5432:5432"
+    networks:
+     - internal
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}" , "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Adminer
+  adminer:
+    container_name: adminer_container
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - internal
+
+
+
+
+networks:
+  internal:
+    driver: bridge

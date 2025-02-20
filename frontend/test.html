@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Test Frontend</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>API Test Frontend</h1>
+
+  <div class="section">
+    <h2>Add Users</h2>
+    <input type="text" id="userNames" placeholder="Enter names separated by commas">
+    <button onclick="addUsers()">Add Users</button>
+    <pre id="addUsersResponse"></pre>
+  </div>
+
+  <div class="section">
+    <h2>Fetch Users</h2>
+    <button onclick="fetchUsers()">Fetch Users</button>
+    <pre id="fetchUsersResponse"></pre>
+  </div>
+
+  <div class="section">
+    <h2>Delete User</h2>
+    <input type="text" id="deleteUserName" placeholder="Enter user name to delete">
+    <button onclick="deleteUser()">Delete User</button>
+    <pre id="deleteUserResponse"></pre>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:8001/api';
+
+    async function addUsers() {
+      const namesInput = document.getElementById('userNames').value;
+      const names = namesInput.split(',').map(name => name.trim()).filter(name => name);
+
+      if (names.length === 0) {
+        alert('Please enter at least one name.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/users/save/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ names }),
+        });
+
+        const data = await response.json();
+        document.getElementById('addUsersResponse').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('addUsersResponse').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    async function fetchUsers() {
+      try {
+        const response = await fetch(`${API_URL}/users/`);
+        const data = await response.json();
+        document.getElementById('fetchUsersResponse').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('fetchUsersResponse').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    async function deleteUser() {
+      const userName = document.getElementById('deleteUserName').value.trim();
+
+      if (!userName) {
+        alert('Please enter a user name to delete.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/users/delete/`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ names: [userName] }),
+        });
+
+        const data = await response.json();
+        document.getElementById('deleteUserResponse').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('deleteUserResponse').textContent = `Error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
