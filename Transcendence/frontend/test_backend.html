@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Test Frontend</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>API Test Frontend</h1>
+
+  <div class="section">
+    <h2>Add Users</h2>
+    <button id="startTournamentButton">Add Users</button>
+    <pre id="addUsersResponse"></pre>
+  </div>
+
+  <div class="section">
+    <h2>Fetch Users</h2>
+    <button id="fetchUsersButton">Fetch Users</button>
+    <pre id="fetchUsersResponse"></pre>
+  </div>
+
+  <div class="section">
+    <h2>Delete User</h2>
+    <button id="deleteUserButton">Delete User</button>
+    <pre id="deleteUserResponse"></pre>
+  </div>
+
+  <script src="js/backendFront.js"></script>
+</body>
+</html>
