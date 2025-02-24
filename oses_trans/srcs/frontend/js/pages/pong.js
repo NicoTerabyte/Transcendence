@@ -3,7 +3,9 @@ import { initializeGame } from "../pong/app.js"
 
 export function renderPongPage() {
   const root = document.getElementById("root");
-  root.innerHTML = ""; // Clear previous content
+  // Clear previous content that means that the page in question
+  //will be ready to be filled with something else
+  root.innerHTML = "";
 
   // Add the navbar
   const navbar = Navbar();
@@ -23,12 +25,22 @@ export function renderPongPage() {
   const menu = document.createElement("div");
   menu.id = "menu";
 
+  //*buttons in the menu
   const startButton = document.createElement("button");
-  startButton.id = "startButton";
+  startButton.id = "startGameButton";
   startButton.textContent = "Start Game";
   menu.appendChild(startButton);
-  pongContainer.appendChild(menu);
 
+  const tournamentButton = document.createElement("button");
+  tournamentButton.id = "tournamentButton";
+  tournamentButton.textContent = "Play tournament";
+  menu.appendChild(tournamentButton);
+
+  const cpuButton = document.createElement("button");
+  cpuButton.id = "cpuButton";
+  cpuButton.textContent = "Play tournament";
+  menu.appendChild(cpuButton);
+  pongContainer.appendChild(menu);
   // Scores
   const scores = document.createElement("div");
   scores.id = "scores";

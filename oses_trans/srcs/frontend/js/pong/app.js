@@ -3,6 +3,7 @@ import { showMenu } from './menu.js';
 import { showWinningScreen } from './winningScreen.js'
 
 export function initializeGame() {
+  console.log("gaming!!!")
   const canvas = document.getElementById('gameCanvas');
   const scores = document.getElementById('scores');
   const player1ScoreElement = document.getElementById('player1Score');
