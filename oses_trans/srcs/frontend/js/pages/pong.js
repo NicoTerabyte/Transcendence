@@ -2,6 +2,7 @@ import { Navbar } from "../components/navbar.js";
 import { initializeGame } from "../pong/app.js"
 
 export function renderPongPage() {
+  console.log("we doing this????");
   const root = document.getElementById("root");
   // Clear previous content that means that the page in question
   //will be ready to be filled with something else
@@ -38,7 +39,7 @@ export function renderPongPage() {
 
   const cpuButton = document.createElement("button");
   cpuButton.id = "cpuButton";
-  cpuButton.textContent = "Play tournament";
+  cpuButton.textContent = "Play vs cpu";
   menu.appendChild(cpuButton);
   pongContainer.appendChild(menu);
   // Scores
