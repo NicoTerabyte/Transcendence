@@ -1,3 +1,11 @@
+//this function is actually broken, here's what what i understood from it
+/*
+	- it doens't load the buttons properly, because it seems that
+	- it didn't created at all and gives me some errors related to the
+	- fact that the buttons are not defined because in the first place it doesn't have the
+	- function to make the different modes work.
+*/
+
 export function showMenu(start1v1Callback, startTournamentCallback, startCpuGameCallback) {
 	const menu = document.getElementById('menu');
 	const start1v1Button = document.getElementById('startGameButton');

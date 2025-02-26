@@ -2,14 +2,18 @@
  //files that are needed to make the game work
  import { gameLoop } from './gameLoop.js';
  import { showMenu } from './menu.js';
+  // import { Navbar } from "../components/navbar.js";
+import { buttonsHandler } from './buttonsHandler.js'
  // import { showWinningScreen } from './winningScreen.js';
  import { fetchMatches, fetchAllUsers, saveUsers, deleteAllUsers } from './backendFront.js';
 
 let gameMode = '1v1'; // Default mode
 let tournamentMatches = []; // Store tournament matches
 
-export function initializeGame() {
+export function initializeGame(navbar) {
   console.log("initizalizing game");
+
+  //this is the calssic setup done to make the tournament parte avaible
   // showMenu(start1v1Game, startTournament, startCpuGame);
     // If these elements exist in your rendered HTML, you can attach event listeners.
     const playerNamesForm = document.getElementById('playerNamesForm');
@@ -69,6 +73,9 @@ export function initializeGame() {
 
   function start1v1Game() {
     console.log('Starting 1v1 Game');
+    if (navbar)
+      navbar.style.display = 'none';
+
     gameMode = '1v1';
     const player1Name = 'Player 1';
     const player2Name = 'Player 2';
@@ -76,15 +83,15 @@ export function initializeGame() {
     const scores = document.getElementById('scores');
     scores.style.display = 'block';
     canvas.style.display = 'block';
+    buttonsHandler(startButton, cpuButton, tournamentButton, false);
     // Start normal game loop (both paddles controlled by keyboard)
-    startButton.style.display = 'none'
-    cpuButton.style.display = 'none'
-    tournamentButton.style.display = 'none'
     gameLoop(canvas, endGame, player1Name, player2Name);
   }
 
   function startCpuGame() {
     console.log('Starting Game Against CPU');
+    if (navbar)
+      navbar.style.display = 'none';
     gameMode = 'cpu';
     const player1Name = 'Player 1';
     const player2Name = 'CPU';
@@ -92,6 +99,8 @@ export function initializeGame() {
     const scores = document.getElementById('scores');
     scores.style.display = 'block';
     canvas.style.display = 'block';
+
+    buttonsHandler(startButton, cpuButton, tournamentButton, false);
     // Pass an extra flag (true) to enable CPU logic in gameLoop
     gameLoop(canvas, endGame, player1Name, player2Name, true);
   }
@@ -99,13 +108,17 @@ export function initializeGame() {
   // startTournament remains unchanged...
   async function startTournament() {
     console.log('Starting Tournament');
+    if (navbar)
+      navbar.style.display = 'none';
     gameMode = 'tournament';
     const canvas = document.getElementById('gameCanvas');
     const scores = document.getElementById('scores');
     tournamentMatches = await fetchMatches();
+    buttonsHandler(startButton, cpuButton, tournamentButton, false);
     if (!tournamentMatches.length) {
       alert('No matches available for the tournament.');
-      showMenu(start1v1Game, startTournament, startCpuGame);
+      // showMenu(start1v1Game, startTournament, startCpuGame);
+
       return;
     }
     playTournamentMatch(tournamentMatches.shift());
@@ -125,19 +138,18 @@ export function initializeGame() {
       winningScreen.style.display = 'block';
       restartButton.onclick = () => {
         winningScreen.style.display = 'none';
-        startButton.style.display = 'block';
-        tournamentButton.style.display = 'block';
-        cpuButton.style.display = 'block';
+        buttonsHandler(startButton, cpuButton, tournamentButton, true);
+        navbar.style.display = 'block';
       };
     }
   }
 
-  function restartGame() {
-    console.log('Restarting Game');
-    const player1ScoreElement = document.getElementById('player1Score');
-    const player2ScoreElement = document.getElementById('player2Score');
-    player1ScoreElement.textContent = 'Player 1: 0';
-    player2ScoreElement.textContent = 'Player 2: 0';
-  }
+  // function restartGame() {
+  //   console.log('Restarting Game');
+  //   const player1ScoreElement = document.getElementById('player1Score');
+  //   const player2ScoreElement = document.getElementById('player2Score');
+  //   player1ScoreElement.textContent = 'Player 1: 0';
+  //   player2ScoreElement.textContent = 'Player 2: 0';
+  // }
 
 }

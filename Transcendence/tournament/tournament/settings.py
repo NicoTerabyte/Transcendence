@@ -92,7 +92,7 @@ DATABASES = {
 		'PASSWORD': '1234',
 		#container_postgres for compose
 		#localhost if you're working on your own
-		'HOST': 'localhost',
+		'HOST': 'container_postgres',
 		'PORT': '5432',
     }
 }

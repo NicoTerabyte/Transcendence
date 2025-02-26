@@ -2,8 +2,9 @@
  //files that are needed to make the game work
 import { gameLoop } from './gameLoop.js';
 import { showMenu } from './menu.js';
+import { showWinningScreen } from './winningScreen.js';
 // import { showWinningScreen } from './winningScreen.js';
-import { fetchMatches, fetchAllUsers, saveUsers, deleteAllUsers } from './backendFront.js';
+import { fetchMatches, fetchAllUsers, saveUsers, deleteUser, deleteAllUsers } from './backendFront.js';
 
 let gameMode = '1v1'; // Default mode
 let tournamentMatches = []; // Store tournament matches
@@ -80,13 +81,93 @@ async function startTournament() {
 	gameMode = 'tournament';
 	const canvas = document.getElementById('gameCanvas');
 	const scores = document.getElementById('scores');
+
+	// Fetch tournament matches from the backend once
 	tournamentMatches = await fetchMatches();
+
 	if (!tournamentMatches.length) {
 		alert('No matches available for the tournament.');
-		showMenu(start1v1Game, startTournament, startCpuGame);
+		showMenu(start1v1Game, startTournament); // Show menu again
 		return;
 	}
+
+	// Start the first match
 	playTournamentMatch(tournamentMatches.shift());
+}
+
+function playTournamentMatch(match) {
+	console.log("starting tournament");
+	const { player1, player2 } = match;
+	const matchAnnouncement = document.getElementById('matchAnnouncement');
+	const matchAnnouncementText = document.getElementById('matchAnnouncementText');
+	const startMatchButton = document.getElementById('startMatchButton');
+	const gameCanvas = document.getElementById('gameCanvas');
+	const scores = document.getElementById('scores');
+
+	matchAnnouncementText.textContent = `${player1} vs ${player2}`;
+	matchAnnouncement.style.display = 'block';
+	gameCanvas.style.display = 'none';
+	scores.style.display = 'none';
+
+	startMatchButton.onclick = () => {
+	matchAnnouncement.style.display = 'none';
+	gameCanvas.style.display = 'block';
+	scores.style.display = 'block';
+	// Start the game loop with the tournament endGame callback
+	gameLoop(gameCanvas, (winner) => endTournamentMatch(winner, player1, player2), player1, player2);
+	};
+}
+
+async function endTournamentMatch(winner, player1, player2) {
+	// Hide the canvas before alerting:
+	const gameCanvas = document.getElementById('gameCanvas');
+	const scores = document.getElementById('scores');
+	gameCanvas.style.display = 'none';
+	scores.style.display = 'none';
+
+	const loser = (winner === player1) ? player2 : player1;
+	alert(`${winner} is victorious! Eliminating ${loser} from the tournament.`);
+
+	// Delete the loser
+	await deleteUser(loser);
+
+// Check if all matches in the current round are played
+	if (!tournamentMatches.length) {
+		// Fetch remaining matches
+		const remainingMatches = await fetchMatches();
+
+		if (remainingMatches.length > 0) {
+		// More matches to play, start the next match
+		tournamentMatches = remainingMatches;
+		playTournamentMatch(tournamentMatches.shift());
+		return;
+		}
+
+		// No matches remain, check if only one user remains
+		const remainingUsers = await fetchAllUsers();
+
+		if (remainingUsers.length === 1) {
+		// Declare the remaining user as the champion
+		showWinningScreen(remainingUsers[0].name, restartGame);
+		return;
+		} else if (remainingUsers.length > 1) {
+		// If multiple users remain without matches, start a new round
+		tournamentMatches = await fetchMatches();
+			if (tournamentMatches.length > 0) {
+				playTournamentMatch(tournamentMatches.shift());
+				return;
+			}
+		}
+
+		// If no users remain or an unexpected state occurs
+		alert('No players left in the tournament.');
+		showMenu(start1v1Game, startTournament);
+		return;
+	}
+
+	if (tournamentMatches.length) {
+		playTournamentMatch(tournamentMatches.shift());
+	}
 }
 
 function endGame(winner) {
