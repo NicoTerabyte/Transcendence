@@ -75,6 +75,7 @@ function startCpuGame() {
 	gameLoop(canvas, endGame, player1Name, player2Name, true);
 }
 
+//!re-put the menu.js thing or we are screwed
 // startTournament remains unchanged...
 async function startTournament() {
 	console.log('Starting Tournament');

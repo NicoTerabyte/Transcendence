@@ -1,11 +1,10 @@
  //I import the code from the other
  //files that are needed to make the game work
- import { gameLoop } from './gameLoop.js';
- import { showMenu } from './menu.js';
-  // import { Navbar } from "../components/navbar.js";
+import { showWinningScreen } from './winningScreen.js';
+import { gameLoop } from './gameLoop.js';
+import { showMenu } from './menu.js';
 import { buttonsHandler } from './buttonsHandler.js'
- // import { showWinningScreen } from './winningScreen.js';
- import { fetchMatches, fetchAllUsers, saveUsers, deleteAllUsers } from './backendFront.js';
+import { fetchMatches, fetchAllUsers, saveUsers, deleteUser, deleteAllUsers } from './backendFront.js';
 
 let gameMode = '1v1'; // Default mode
 let tournamentMatches = []; // Store tournament matches
@@ -13,9 +12,9 @@ let tournamentMatches = []; // Store tournament matches
 export function initializeGame(navbar) {
   console.log("initizalizing game");
 
-  //this is the calssic setup done to make the tournament parte avaible
+  //this is the calssic setup done to make the tournament part avaible
   // showMenu(start1v1Game, startTournament, startCpuGame);
-    // If these elements exist in your rendered HTML, you can attach event listeners.
+  // If these elements exist in your rendered HTML, you can attach event listeners.
     const playerNamesForm = document.getElementById('playerNamesForm');
     if (playerNamesForm) {
       playerNamesForm.addEventListener('submit', (event) => {
@@ -28,6 +27,7 @@ export function initializeGame(navbar) {
       });
     }
 
+    showMenu(start1v1Game, startTournament, startCpuGame);
     // Attach other event listeners (make sure the referenced elements exist)
     const cancelTournamentSetup = document.getElementById('cancelTournamentSetup');
     if (cancelTournamentSetup) {
@@ -55,20 +55,20 @@ export function initializeGame(navbar) {
     }
 
   // Attach event listeners for game buttons
-  const startButton = document.getElementById('startGameButton');
-  if (startButton) {
-    startButton.addEventListener('click', start1v1Game);
-  }
+  // const startButton = document.getElementById('startGameButton');
+  // if (startButton) {
+  //   startButton.addEventListener('click', start1v1Game);
+  // }
 
-  const tournamentButton = document.getElementById('tournamentButton');
-  if (tournamentButton) {
-    tournamentButton.addEventListener('click', startTournament);
-  }
+  // const tournamentButton = document.getElementById('tournamentButton');
+  // if (tournamentButton) {
+  //   tournamentButton.addEventListener('click', tournamentSetup());
+  // }
 
-  const cpuButton = document.getElementById('cpuButton');
-  if (cpuButton) {
-    cpuButton.addEventListener('click', startCpuGame);
-  }
+  // const cpuButton = document.getElementById('cpuButton');
+  // if (cpuButton) {
+  //   cpuButton.addEventListener('click', startCpuGame);
+  // }
 
 
   function start1v1Game() {
@@ -83,7 +83,7 @@ export function initializeGame(navbar) {
     const scores = document.getElementById('scores');
     scores.style.display = 'block';
     canvas.style.display = 'block';
-    buttonsHandler(startButton, cpuButton, tournamentButton, false);
+    // buttonsHandler(startButton, cpuButton, tournamentButton, false);
     // Start normal game loop (both paddles controlled by keyboard)
     gameLoop(canvas, endGame, player1Name, player2Name);
   }
@@ -117,13 +117,86 @@ export function initializeGame(navbar) {
     buttonsHandler(startButton, cpuButton, tournamentButton, false);
     if (!tournamentMatches.length) {
       alert('No matches available for the tournament.');
-      // showMenu(start1v1Game, startTournament, startCpuGame);
-
+      showMenu(start1v1Game, startTournament, startCpuGame);
       return;
     }
     playTournamentMatch(tournamentMatches.shift());
   }
 
+  function playTournamentMatch(match) {
+	console.log("starting tournament");
+	const { player1, player2 } = match;
+	const matchAnnouncement = document.getElementById('matchAnnouncement');
+	const matchAnnouncementText = document.getElementById('matchAnnouncementText');
+	const startMatchButton = document.getElementById('startMatchButton');
+	const gameCanvas = document.getElementById('gameCanvas');
+	const scores = document.getElementById('scores');
+
+	matchAnnouncementText.textContent = `${player1} vs ${player2}`;
+	matchAnnouncement.style.display = 'block';
+	gameCanvas.style.display = 'none';
+	scores.style.display = 'none';
+
+	startMatchButton.onclick = () => {
+	matchAnnouncement.style.display = 'none';
+	gameCanvas.style.display = 'block';
+	scores.style.display = 'block';
+	// Start the game loop with the tournament endGame callback
+	gameLoop(gameCanvas, (winner) => endTournamentMatch(winner, player1, player2), player1, player2);
+	};
+}
+
+async function endTournamentMatch(winner, player1, player2) {
+	// Hide the canvas before alerting:
+	const gameCanvas = document.getElementById('gameCanvas');
+	const scores = document.getElementById('scores');
+	gameCanvas.style.display = 'none';
+	scores.style.display = 'none';
+
+	const loser = (winner === player1) ? player2 : player1;
+	alert(`${winner} is victorious! Eliminating ${loser} from the tournament.`);
+
+	// Delete the loser
+	await deleteUser(loser);
+
+// Check if all matches in the current round are played
+	if (!tournamentMatches.length) {
+		// Fetch remaining matches
+		const remainingMatches = await fetchMatches();
+
+		if (remainingMatches.length > 0) {
+		// More matches to play, start the next match
+		tournamentMatches = remainingMatches;
+		playTournamentMatch(tournamentMatches.shift());
+		return;
+		}
+
+		// No matches remain, check if only one user remains
+		const remainingUsers = await fetchAllUsers();
+
+		if (remainingUsers.length === 1) {
+		// Declare the remaining user as the champion
+		showWinningScreen(remainingUsers[0].name, restartGame);
+		return;
+		} else if (remainingUsers.length > 1) {
+		// If multiple users remain without matches, start a new round
+		tournamentMatches = await fetchMatches();
+			if (tournamentMatches.length > 0) {
+				playTournamentMatch(tournamentMatches.shift());
+				return;
+			}
+		}
+
+		// If no users remain or an unexpected state occurs
+		alert('No players left in the tournament.');
+		showMenu(start1v1Game, startTournament, );
+		return;
+	}
+
+	if (tournamentMatches.length) {
+		playTournamentMatch(tournamentMatches.shift());
+	}
+}
   function endGame(winner) {
     console.log('End Game:', winner);
     if (gameMode === '1v1' || gameMode === 'cpu') {
@@ -138,7 +211,8 @@ export function initializeGame(navbar) {
       winningScreen.style.display = 'block';
       restartButton.onclick = () => {
         winningScreen.style.display = 'none';
-        buttonsHandler(startButton, cpuButton, tournamentButton, true);
+        showMenu(start1v1Game, startTournament, startCpuGame);
+        // buttonsHandler(startButton, cpuButton, tournamentButton, true);
         navbar.style.display = 'block';
       };
     }

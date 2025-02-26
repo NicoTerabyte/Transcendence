@@ -1,23 +1,13 @@
-//this function is actually broken, here's what what i understood from it
-/*
-	- it doens't load the buttons properly, because it seems that
-	- it didn't created at all and gives me some errors related to the
-	- fact that the buttons are not defined because in the first place it doesn't have the
-	- function to make the different modes work.
-*/
-
 export function showMenu(start1v1Callback, startTournamentCallback, startCpuGameCallback) {
 	const menu = document.getElementById('menu');
 	const start1v1Button = document.getElementById('startGameButton');
 	const startTournamentButton = document.getElementById('tournamentButton');
 	const startCpuGameButton = document.getElementById('cpuButton');
 
-	console.log("menu got called!!!");
 	// Display the main menu
 	menu.style.display = 'block';
 
 	// Ensure the "Start Tournament" and "Play Against CPU" buttons are visible
-	start1v1Button.style.display = 'block';
 	startTournamentButton.style.display = 'block';
 	startCpuGameButton.style.display = 'block';
 
@@ -26,24 +16,28 @@ export function showMenu(start1v1Callback, startTournamentCallback, startCpuGame
 	startTournamentButton.replaceWith(startTournamentButton.cloneNode(true));
 	startCpuGameButton.replaceWith(startCpuGameButton.cloneNode(true));
 
-	// const newStart1v1Button = document.getElementById('startGameButton');
-	// const newStartTournamentButton = document.getElementById('tournamentButton');
-	// const newStartCpuGameButton = document.getElementById('cpuButton');
+	const newStart1v1Button = document.getElementById('startGameButton');
+	const newStartTournamentButton = document.getElementById('tournamentButton');
+	const newStartCpuGameButton = document.getElementById('cpuButton');
 
-	//this is the setup of the buttons, but said buttons are not called :(
 	// 1v1 mode
-	const startButton = document.getElementById('startGameButton');
-	if (startButton) {
-	  startButton.addEventListener('click', start1v1Game);
-	}
+	newStart1v1Button.addEventListener('click', () => {
+	  console.log('Start 1v1 Game Button Clicked');
+	  menu.style.display = 'none';
+	  start1v1Callback();
+	});
 
-	const tournamentButton = document.getElementById('tournamentButton');
-	if (tournamentButton) {
-	  tournamentButton.addEventListener('click', startTournament);
-	}
+	// Tournament mode: just show the tournament setup form
+	newStartTournamentButton.addEventListener('click', () => {
+	  console.log('Start Tournament Button Clicked');
+	  menu.style.display = 'none';
+	  document.getElementById('tournamentSetup').style.display = 'block';
+	});
 
-	const cpuButton = document.getElementById('cpuButton');
-	if (cpuButton) {
-	  cpuButton.addEventListener('click', startCpuGame);
-	}
+	// CPU mode: start the game against the bot
+	newStartCpuGameButton.addEventListener('click', () => {
+	  console.log('Play Against CPU Button Clicked');
+	  menu.style.display = 'none';
+	  startCpuGameCallback();
+	});
   }

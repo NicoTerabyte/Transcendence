@@ -1,6 +1,3 @@
-import { showMenu } from "./menu.js";
-import { initializeGame } from "./app";
-
 export function showWinningScreen(winner, restartGameCallback) {
 	const winningScreen = document.getElementById('winningScreen');
 	const winnerMessage = document.getElementById('winnerMessage');
@@ -11,6 +8,6 @@ export function showWinningScreen(winner, restartGameCallback) {
 
 	restartButton.addEventListener('click', () => {
 		winningScreen.style.display = 'none';
-		initializeGame();
+		restartGameCallback();
 	});
 }
