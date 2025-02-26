@@ -29,3 +29,5 @@ class Post(models.Model):
 #user_loggato, num_utenti, posizione_finale
 #quindi i vari servizi saranno dei django startproject
 #modelli per la gestione della match history
+
+#1vs1 utente loggato pure deve essere sostituito al posto di player1
