@@ -87,13 +87,13 @@ WSGI_APPLICATION = 'tournament.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tournament_db',
-		'USER': 'user',
-		'PASSWORD': '1234',
+        'NAME': os.environ("POSTGRES_TOURNAMENT_DB"),
+		'USER': os.environ("POSTGRES_USER"),
+		'PASSWORD': os.environ("POSTGRES_PASSWORD"),
 		#container_postgres for compose
 		#localhost if you're working on your own
-		'HOST': 'container_postgres',
-		'PORT': '5432',
+		'HOST': os.environ("POSTGRES_TOURNAMENT_HOST"),
+		'PORT': os.environ("POSTGRES_PORT"),
     }
 }
 

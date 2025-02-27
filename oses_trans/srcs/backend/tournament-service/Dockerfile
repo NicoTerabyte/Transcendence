@@ -16,5 +16,5 @@ COPY . .
 EXPOSE 8003
 
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
-# Command to run makemigrations, migrate, and start the server
-CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8003"]
+# # Command to run makemigrations, migrate, and start the server
+# CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8003"]

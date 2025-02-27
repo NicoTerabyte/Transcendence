@@ -70,7 +70,7 @@ export function renderPongPage() {
   tournamentSetup.id = "tournamentSetup";
   tournamentSetup.style.display = "none";
 
-  //pieaces for the tournament mode
+  //pieces for the tournament mode
   const headingForTournament = document.createElement("h2");
   headingForTournament.textContent = "setup tournament";
   tournamentSetup.appendChild(headingForTournament);
@@ -123,14 +123,17 @@ export function renderPongPage() {
   matchAnnouncement.appendChild(matchHeader);
 
   const matchP = document.createElement("p");
-  matchP.id = "matchAnnouncementeText";
+  matchP.id = "matchAnnouncementText";
+  matchP.textContent = "testing";
   matchAnnouncement.appendChild(matchP);
-  //! needs to be finished
+  // needs to be finished
   const startMatchButton = document.createElement("button");
   startMatchButton.id = "startMatchButton";
   startMatchButton.textContent = "Start match";
-  matchAnnouncement.appendChild(startMatchButton);
 
+  matchAnnouncement.appendChild(startMatchButton);
+  //adding it to the pongContainer
+  pongContainer.appendChild(matchAnnouncement);
   // Game Canvas
   const gameCanvas = document.createElement("canvas");
   gameCanvas.id = "gameCanvas";
