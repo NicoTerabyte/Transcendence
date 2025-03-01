@@ -232,3 +232,15 @@ async function endTournamentMatch(winner, player1, player2) {
   }
 
 }
+
+
+/*
+*Task di oggi di revisione e per aggiustare le cose a livello
+*organizzativo:
+  TODO: sistemare il github di django, avendo la modalità
+    TODO: torneo non funzionante
+
+  TODO: Revisionare algoritmo della CPU ora come ora non va bene com'è fatto
+
+
+*/
