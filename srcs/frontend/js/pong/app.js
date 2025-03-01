@@ -202,6 +202,7 @@ async function endTournamentMatch(winner, player1, player2) {
     console.log('End Game:', winner);
     if (gameMode === '1v1' || gameMode === 'cpu') {
       const canvas = document.getElementById('gameCanvas');
+      //TODO: trovare un modo per prendere e convertire gli score
       const scores = document.getElementById('scores');
       const winningScreen = document.getElementById('winningScreen');
       const winnerMessage = document.getElementById('winnerMessage');
@@ -215,6 +216,7 @@ async function endTournamentMatch(winner, player1, player2) {
         showMenu(start1v1Game, startTournament, startCpuGame);
         // buttonsHandler(startButton, cpuButton, tournamentButton, true);
         navbar.style.display = 'block';
+
       };
     }
   }
@@ -237,10 +239,13 @@ async function endTournamentMatch(winner, player1, player2) {
 /*
 *Task di oggi di revisione e per aggiustare le cose a livello
 *organizzativo:
+  TODO: vincitore del 1vs1 [X]
   TODO: sistemare il github di django, avendo la modalità
     TODO: torneo non funzionante
 
   TODO: Revisionare algoritmo della CPU ora come ora non va bene com'è fatto
 
-
+  * fare schermata di vittoria per locale amatta c'è già
+  TODO: salvare scores per 1vs1 di amatta, fare la conversione a modo
+  TODO: per il torneo posizione e numero utenti
 */

@@ -28,6 +28,9 @@ import os
 #i send the losers with a delete request deleting the users from the
 #matchmaking database
 #i repeat the steps until there's a winner
+
+
+#extra
 @api_view(['GET'])
 def get_users(request):
 	print('\033[32mready to get the users \033[0m')
