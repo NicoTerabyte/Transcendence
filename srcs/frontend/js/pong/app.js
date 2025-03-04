@@ -284,61 +284,11 @@ export async function initializeGame(navbar) {
 		showMenu(start1v1Game, startTournament, startCpuGame);
 	}
 }
-<<<<<<< HEAD:frontend/js/pong/app.js
-  function endGame(winner) {
-    console.log('End Game:', winner);
-    if (gameMode === '1v1' || gameMode === 'cpu') {
-      const canvas = document.getElementById('gameCanvas');
-      //TODO: trovare un modo per prendere e convertire gli score
-      const scores = document.getElementById('scores');
-      const winningScreen = document.getElementById('winningScreen');
-      const winnerMessage = document.getElementById('winnerMessage');
-      const restartButton = document.getElementById('restartButton');
-      canvas.style.display = 'none';
-      scores.style.display = 'none';
-      winnerMessage.textContent = `${winner} wins!`;
-      winningScreen.style.display = 'block';
-      restartButton.onclick = () => {
-        winningScreen.style.display = 'none';
-        showMenu(start1v1Game, startTournament, startCpuGame);
-        // buttonsHandler(startButton, cpuButton, tournamentButton, true);
-        navbar.style.display = 'block';
-
-      };
-    }
-  }
-
-  function restartGame() {
-    console.log('Restarting Game');
-    const player1ScoreElement = document.getElementById('player1Score');
-    const player2ScoreElement = document.getElementById('player2Score');
-    player1ScoreElement.textContent = 'Player 1: 0';
-    player2ScoreElement.textContent = 'Player 2: 0';
-    //!strange but true this works? BUT i need to analyze properly the
-    //!the part where i should show case the winner of the tournament or am i dumb?
-    //! tomorrow's task tough
-    showMenu(start1v1Game, startTournament, startCpuGame);
-  }
-
-}
-=======
->>>>>>> origin/main:srcs/frontend/js/pong/app.js
 
 
 /*
 *Task di oggi di revisione e per aggiustare le cose a livello
 *organizzativo:
-<<<<<<< HEAD:frontend/js/pong/app.js
-  TODO: vincitore del 1vs1 [X]
-  TODO: sistemare il github di django, avendo la modalità
-    TODO: torneo non funzionante
-
-  TODO: Revisionare algoritmo della CPU ora come ora non va bene com'è fatto
-
-  * fare schermata di vittoria per locale amatta c'è già
-  TODO: salvare scores per 1vs1 di amatta, fare la conversione a modo
-  TODO: per il torneo posizione e numero utenti
-=======
 	// vincitore del 1vs1 [X]
 	TODO: sistemare il github di django, avendo la modalità (no priorità)
 		TODO: torneo non funzionante
@@ -348,5 +298,4 @@ export async function initializeGame(navbar) {
 	// * fare schermata di vittoria per locale amatta c'è già
 	// salvare scores per 1vs1 di amatta, fare la conversione a modo [X]
 	// per il torneo posizione [X] e numero utenti [X]
->>>>>>> origin/main:srcs/frontend/js/pong/app.js
 */

@@ -31,18 +31,14 @@ ALLOWED_HOSTS = ['localhost', 'tournament-service', '127.0.0.1', '0.0.0.0     ']
 # Application definition
 
 INSTALLED_APPS = [
-	'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<<< HEAD:tournament/tournament/settings.py
-========
 
     'corsheaders',
->>>>>>>> main:srcs/backend/tournament-service/tournament/settings.py
 	'rest_framework',
 	'api',
 ]
@@ -92,15 +88,6 @@ WSGI_APPLICATION = 'tournament.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-<<<<<<<< HEAD:tournament/tournament/settings.py
-        'NAME': 'tournament_db',
-		'USER': 'user',
-		'PASSWORD': '1234',
-		#container_postgres for compose
-		#localhost if you're working on your own
-		'HOST': 'localhost',
-		'PORT': '5432',
-========
         'NAME': os.environ.get("POSTGRES_TOURNAMENT_DB"),
 		'USER': os.environ.get("POSTGRES_USER"),
 		'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
@@ -108,7 +95,6 @@ DATABASES = {
 		#localhost if you're working on your own
 		'HOST': os.environ.get("POSTGRES_TOURNAMENT_HOST"),
 		'PORT': os.environ.get("POSTGRES_PORT"),
->>>>>>>> main:srcs/backend/tournament-service/tournament/settings.py
     }
 }
 
@@ -156,11 +142,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-<<<<<<<< HEAD:tournament/tournament/settings.py
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Add your front-end URL here
-    "http://127.0.0.1:8000",
-========
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:8000",  # Add your front-end URL here
 #     "http://127.0.0.1:8000",
@@ -172,5 +153,4 @@ CORS_ALLOW_CREDENTIALS = True # If you need to send cookies or authentication he
 
 CORS_ALLOWED_ORIGINS = [
     #"https://localhost",
->>>>>>>> main:srcs/backend/tournament-service/tournament/settings.py
 ]
