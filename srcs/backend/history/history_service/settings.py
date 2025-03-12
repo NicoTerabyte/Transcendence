@@ -189,3 +189,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSP_DEFAULT_SRC = ("'self'", "'blob:'")
+CSP_SCRIPT_SRC = ("'self'", "https://cdn.jsdelivr.net", "https://auth.42.fr")
+CSP_CONNECT_SRC = ("'self'", "'blob:'")
+CSP_IMG_SRC = ("'self'", "'data:'")
+CSP_MEDIA_SRC = ("'self'", "'blob:'")
+CSP_FONT_SRC = ("'self'", "'data:'")
+CSP_STYLE_SRC = ("'self'",)

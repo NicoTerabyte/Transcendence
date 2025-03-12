@@ -1,6 +1,6 @@
 import { Navbar } from "../components/navbar.js";
 import { initializeGame } from "../pong/app.js"
-
+import { initializeGame3D } from "../pong3D/main.js"
 
 //! i have a theory for the menu problem
 //* maybe i just didn't put the buttons in the right
@@ -46,8 +46,14 @@ export function renderPongPage() {
   cpuButton.id = "cpuButton";
   cpuButton.textContent = "Play vs cpu";
   menu.appendChild(cpuButton);
-  pongContainer.appendChild(menu);
 
+  const pong3DButton = document.createElement("button");
+  pong3DButton.id = "start3DGame";
+  pong3DButton.textContent = "start 3d game";
+  pong3DButton.style.display = "block";
+  menu.appendChild(pong3DButton);
+
+  pongContainer.appendChild(menu);
   // Scores
   const scores = document.createElement("div");
   scores.id = "scores";
@@ -141,6 +147,14 @@ export function renderPongPage() {
   gameCanvas.style.display = "none";
   pongContainer.appendChild(gameCanvas);
 
+
+  //!canvas for the 3d One
+  const gameCanvas3d = document.createElement("canvas");
+  gameCanvas3d.id = "gameCanvas3d";
+  // gameCanvas.width = 1000;
+  // gameCanvas.height = 500;
+  gameCanvas3d.style.display = "none";
+  pongContainer.appendChild(gameCanvas3d);
   // Winning Screen
   const winningScreen = document.createElement("div");
   winningScreen.id = "winningScreen";
@@ -162,6 +176,13 @@ export function renderPongPage() {
 
   // Initialize the game logic
   initializeGame(navbar);
+
+  // Add event listeners for the buttons
+  startButton.addEventListener('click', () => initializeGame(navbar));
+  tournamentButton.addEventListener('click', () => initializeGame(navbar));
+  cpuButton.addEventListener('click', () => initializeGame(navbar));
+  pong3DButton.addEventListener('click', () => initializeGame3D()); // Add event listener for Pong 3D button
+  //* when starting the 3d pong make the elements of the pong disappear completely
 }
 
 // import { Navbar } from "../components/navbar.js";
