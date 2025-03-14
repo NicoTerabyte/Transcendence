@@ -12,31 +12,24 @@ import { userService } from '../services/userService.js';
 
 
 
-function hideAllPong(Navbar) {
-  document.getElementById("title").style.display = 'none';
-  document.getElementById("menu").style.display = 'none';
-  document.getElementById("pong-container").style.display = 'none';
-  document.getElementById("gameCanvas3dContainer").style.display = 'block'
-  Navbar.style.display = 'none';
-  // document.getElementById("gameCanvas3dContainer").style.display = 'block';
-}
-
-
-let gameOver = false;
-let leftScore = 0;
-let rightScore = 0;
-
 export async function initializeGame3D(Navbar) {
   hideAllPong(Navbar);
 	const userData = userService.getUserData();
   document.getElementById('gameCanvas3d').style.display = 'block';
-  let container = document.getElementById('gameCanvas3dContainer');
+
+  //!testing out with global variables
+  let gameOver = false;
+  let leftScore = 0;
+  let rightScore = 0;
+  let container = document.getElementById('pong-container');
+
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(80, container.clientWidth / container.clientHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas3d') });
   const player1Name = userData.username;
-
+  document.getElementById("gameOver").addEventListener('click', () => showPongMenu(Navbar));
   renderer.setSize(container.clientWidth, container.clientHeight);
+  //* to have the container work with a div of our choice we need to append the render to it
   container.appendChild(renderer.domElement);
 
   // Play area setup
@@ -56,12 +49,15 @@ export async function initializeGame3D(Navbar) {
   // Paddles texture
   const loadedSkin = new THREE.TextureLoader();
   const texture = loadedSkin.load('../textures/superSqualo.jpg');
+  //* this if both setted at false should fix the warnings
+  //* but the image as a texture will be set upside down
 
-  // Create paddles
   const paddleUpper = createPaddle(texture);
   const paddleUnder = createPaddle(texture);
   scene.add(paddleUpper, paddleUnder);
 
+  paddleUpper.position.set(0, 3, -25);
+	paddleUnder.position.set(0, 3, 25);
   // Create ball
   const ball = createBall();
   ball.position.set(0, 1, 0);
@@ -139,15 +135,12 @@ export async function initializeGame3D(Navbar) {
       scene.remove(leftScoreMesh);
       scene.remove(rightScoreMesh);
       document.getElementById('gameOver').style.display = 'block';
-      // document.getElementById("pong-container").style.display = 'block';
-      // document.getElementById('gameCanvas3d').style.display = 'none';
       createWinnerText('Upper player');
     } else if (rightScore >= winningScore) {
       gameOver = true;
       scene.remove(leftScoreMesh);
       scene.remove(rightScoreMesh);
-      // document.getElementById('gameCanvas3d').style.display = 'none';
-      // document.getElementById("pong-container").style.display = 'block';
+
       document.getElementById('gameOver').style.display = 'block';
       createWinnerText(player1Name);
     }
@@ -235,16 +228,47 @@ export async function initializeGame3D(Navbar) {
     }
   }
 
-  window.backToMenu = function () {
-    document.getElementById('gameCanvas3d').style.display = 'none';
-    document.getElementById('gameOver').style.display = 'none';
-    gameOver = false;
-  };
+  //!elements section
+  function hideAllPong(Navbar) {
+    document.getElementById("title").style.display = 'none';
+    document.getElementById("menu").style.display = 'none';
+    Navbar.style.display = 'none';
 
-  gameOver = false;
+    // document.getElementById("gameCanvas3dContainer").style.display = 'block';
+  }
+
+
+  function showPongMenu(Navbar)
+  {
+    document.getElementById("title").style.display = 'block';
+    document.getElementById("menu").style.display = 'block';
+    Navbar.style.display = 'block';
+    document.getElementById("gameOver").style.display = 'none';
+    document.getElementById('gameCanvas3d').style.display = 'none';
+    // texture.dispose();
+    // renderer.dispose()
+    // scene.remove(camera);
+    // scene.remove(leftWall);
+    // scene.remove(rightWall);
+    // scene.remove(ball);
+    // scene.remove(renderer);
+    scene.clear()
+  }
+
+
   paddleUpper.position.set(0, 3, -25);
   paddleUnder.position.set(0, 3, 25);
   createScoreText();
   resetBall();
   animate();
 }
+
+/*
+Il problema relativo alla scena potrebbe essere risolto
+se liberiamo i vari oggetti sulla scena nonché la scena stessa
+vediamo in base alle info ricevute dobbiamo rimuovere
+- ogni geometria quindi ogni mesh
+- i materiali di ogni geometria
+- le texture
+
+*/

@@ -366,17 +366,3 @@ export async function initializeGame(navbar) {
 	}
 }
 
-
-/*
-*Task di oggi di revisione e per aggiustare le cose a livello
-*organizzativo:
-	// vincitore del 1vs1 [X]
-	TODO: sistemare il github di django, avendo la modalità (no priorità)
-		TODO: torneo non funzionante
-
-	//  Revisionare algoritmo della CPU ora come ora non va bene com'è fatto [X]
-
-	// * fare schermata di vittoria per locale amatta c'è già
-	// salvare scores per 1vs1 di amatta, fare la conversione a modo [X]
-	// per il torneo posizione [X] e numero utenti [X]
-*/

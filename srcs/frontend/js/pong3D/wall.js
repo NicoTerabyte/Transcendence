@@ -7,5 +7,6 @@ export function lateralWalls()
 	const wall = new THREE.Mesh(wallGeometry, wallMaterial);
 
 	wall.rotation.x = Math.PI / 2;
+
 	return (wall);
 }

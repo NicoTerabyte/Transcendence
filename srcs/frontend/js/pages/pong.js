@@ -133,24 +133,25 @@ export function renderPongPage() {
   gameCanvas.style.display = "none";
   pongContainer.appendChild(gameCanvas);
 
-  const gameCanvas3dContainer = document.createElement("div");
-  gameCanvas3dContainer.id = "gameCanvas3dContainer";
-  gameCanvas3dContainer.style.position = "relative";
-  gameCanvas3dContainer.style.display = 'none';
+  // const gameCanvas3dContainer = document.createElement("div");
+  // gameCanvas3dContainer.id = "gameCanvas3dContainer";
+  // gameCanvas3dContainer.style.position = "relative";
+  // gameCanvas3dContainer.style.display = 'none';
   //?VERY IMPORTANT
   //* Game Canvas for Pong 3D
   const gameCanvas3d = document.createElement("canvas");
   gameCanvas3d.id = "gameCanvas3d";
   gameCanvas3d.style.display = "none";
-  gameCanvas3dContainer.appendChild(gameCanvas3d);
-  
+  pongContainer.appendChild(gameCanvas3d);
+
   const gameOverButton = document.createElement("button");
   gameOverButton.id = "gameOver";
   gameOverButton.textContent = "go back to the menu";
   gameOverButton.style.display = 'none';
-  gameCanvas3dContainer.appendChild(gameOverButton);
+  pongContainer.appendChild(gameOverButton);
   // Winning Screen
-  root.appendChild(gameCanvas3dContainer);
+  //! only in case you use the gameCanvasContainer3d
+  // root.appendChild(gameCanvas3dContainer);
 
   const winningScreen = document.createElement("div");
   winningScreen.id = "winningScreen";
@@ -183,9 +184,12 @@ export function renderPongPage() {
 
 /*
 problemi finali riscontrati fin'ora:
-  il gioco 3d parte ma solo se nascondo tutta la pagina
-  il bottone non compare sopra il canvas del gioco se esso è ancora visibile
-  il gioco 3d compare anche se faccio sparire il container pong che dovrebbe essere il padre?
-  strano...
+  il gioco 3d va con l'apposito canvas e container div
+  il bottone compare sopra di esso a fine partita rimandando al menu principale ottimo
+  !problemi:
+  quando ritorni al menu principale 2 bottoni vengono sballati
+  quando hai fatto una partita in 3d pare che i lgioco salvi la partita stessa la sua scena [x] sistemato
+    ?sistemato pulendo la scena con clear i bottoni rimangono sballati però
+  e la sua ultima istanza che sarebbe quando i giocatori hanno fatto la partita tipo
 
 */
