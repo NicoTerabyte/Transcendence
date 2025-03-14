@@ -178,10 +178,41 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSP_DEFAULT_SRC = ("'self'", "'blob:'")
-CSP_SCRIPT_SRC = ("'self'", "https://cdn.jsdelivr.net", "https://auth.42.fr")
-CSP_CONNECT_SRC = ("'self'", "'blob:'")
-CSP_IMG_SRC = ("'self'", "'data:'")
-CSP_MEDIA_SRC = ("'self'", "'blob:'")
-CSP_FONT_SRC = ("'self'", "'data:'")
+# settings.py (Django)
+
+CSP_DEFAULT_SRC = ("'self'",)  # Fallback for unspecified directives
+
+# Allow scripts from your domain, CDNs, and auth.42.fr
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "https://cdn.jsdelivr.net",
+    "https://auth.42.fr",
+    # Add "'unsafe-eval'" if Three.js requires it (check console)
+)
+
+# Allow connections to your domain, blobs, and threejs.org
+CSP_CONNECT_SRC = (
+    "'self'",
+    "blob:",  # For blob: URLs (no quotes!)
+    "https://threejs.org",  # Allow fetching the font
+)
+
+# Allow fonts from your domain, data: URLs, and threejs.org
+CSP_FONT_SRC = (
+    "'self'",
+    "data:",
+    "https://threejs.org",  # Allow loading the font
+)
+
+# Allow images from self, data: URLs, and blobs
+CSP_IMG_SRC = (
+    "'self'",
+    "data:",
+    "blob:",
+)
+
+# Media sources (audio/video)
+CSP_MEDIA_SRC = ("'self'", "blob:")
+
+# Stylesheets
 CSP_STYLE_SRC = ("'self'",)

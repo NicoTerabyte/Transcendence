@@ -231,13 +231,45 @@ REST_FRAMEWORK = {
     ),
 }
 
-CSP_DEFAULT_SRC = ("'self'", "'blob:'")
-CSP_SCRIPT_SRC = ("'self'", "https://cdn.jsdelivr.net", "https://auth.42.fr")
-CSP_CONNECT_SRC = ("'self'", "'blob:'")
-CSP_IMG_SRC = ("'self'", "'data:'")
-CSP_MEDIA_SRC = ("'self'", "'blob:'")
-CSP_FONT_SRC = ("'self'", "'data:'")
+CSP_DEFAULT_SRC = ("'self'", "blob:")
+
+CSP_SCRIPT_SRC = (
+	"'self'",
+    "https://cdn.jsdelivr.net",
+    "https://auth.42.fr",
+    "unsafe-eval",
+	)
+
+CSP_CONNECT_SRC = (
+	"'self'",
+    "'blob:",
+    "https://threejs.org",)
+
+CSP_IMG_SRC = (
+	"'self'",
+    "data:",
+    "blob:"
+	)
+
+CSP_MEDIA_SRC = (
+	"'self'",
+    "'blob:'"
+	)
+
+
+CSP_FONT_SRC = (
+	"'self'",
+    "data:",
+    "https://threejs.org"
+	)
+
+CSP_MEDIA_SRC = (
+	"'self'",
+    "blob:",
+	)
+
 CSP_STYLE_SRC = ("'self'",)
+
 
 
 
