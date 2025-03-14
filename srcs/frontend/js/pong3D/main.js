@@ -49,11 +49,13 @@ export async function initializeGame3D(Navbar) {
   // Paddles texture
   const loadedSkin = new THREE.TextureLoader();
   const texture = loadedSkin.load('../textures/superSqualo.jpg');
+  texture.flipY = false;
   //* this if both setted at false should fix the warnings
   //* but the image as a texture will be set upside down
 
   const paddleUpper = createPaddle(texture);
   const paddleUnder = createPaddle(texture);
+  //!potrei ruotare i paddle per avere le immagini dritte
   scene.add(paddleUpper, paddleUnder);
 
   paddleUpper.position.set(0, 3, -25);

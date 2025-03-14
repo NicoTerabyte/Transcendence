@@ -189,7 +189,6 @@ problemi finali riscontrati fin'ora:
   !problemi:
   quando ritorni al menu principale 2 bottoni vengono sballati
   quando hai fatto una partita in 3d pare che i lgioco salvi la partita stessa la sua scena [x] sistemato
-    ?sistemato pulendo la scena con clear i bottoni rimangono sballati però
-  e la sua ultima istanza che sarebbe quando i giocatori hanno fatto la partita tipo
+  sistemati i bottoni bastava associare il canvas al container pong che si sballa se nascosto
 
 */
