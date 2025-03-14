@@ -143,7 +143,7 @@ export function renderPongPage() {
   gameCanvas3d.id = "gameCanvas3d";
   gameCanvas3d.style.display = "none";
   gameCanvas3dContainer.appendChild(gameCanvas3d);
-  //!occhio qua manca ancora qualcosa sia sopra che sotto
+  
   const gameOverButton = document.createElement("button");
   gameOverButton.id = "gameOver";
   gameOverButton.textContent = "go back to the menu";

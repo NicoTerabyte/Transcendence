@@ -8,6 +8,9 @@ import { lateralWalls } from './wall.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Navbar } from '../components/navbar.js';
+import { userService } from '../services/userService.js';
+
+
 
 function hideAllPong(Navbar) {
   document.getElementById("title").style.display = 'none';
@@ -25,14 +28,16 @@ let rightScore = 0;
 
 export async function initializeGame3D(Navbar) {
   hideAllPong(Navbar);
-
+	const userData = userService.getUserData();
   document.getElementById('gameCanvas3d').style.display = 'block';
+  let container = document.getElementById('gameCanvas3dContainer');
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(80, container.clientWidth / container.clientHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas3d') });
+  const player1Name = userData.username;
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
 
   // Play area setup
   const playArea = new PlayArea(40, 60); // Width: 40 units, Depth: 60 units
@@ -144,7 +149,7 @@ export async function initializeGame3D(Navbar) {
       // document.getElementById('gameCanvas3d').style.display = 'none';
       // document.getElementById("pong-container").style.display = 'block';
       document.getElementById('gameOver').style.display = 'block';
-      createWinnerText('Lnicoter');
+      createWinnerText(player1Name);
     }
   }
 
@@ -160,7 +165,7 @@ export async function initializeGame3D(Navbar) {
 
     const material = new THREE.MeshNormalMaterial();
     winnerMesh = new THREE.Mesh(winnerGeometry, material);
-    winnerMesh.position.set(-30, 20, 0);
+    winnerMesh.position.set(-playArea.width / 2, 20, 0);
     scene.add(winnerMesh);
   }
 

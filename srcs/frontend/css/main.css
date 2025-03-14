@@ -225,7 +225,12 @@ you don't need to specify the id of the button
   cursor: pointer;
   z-index: 10; /* only for 3d canvas i'm testing out*/
   transition: background-color 0.3s, color 0.3s;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+
 
 #gameCanvas3dContainer
 {
@@ -238,4 +243,10 @@ you don't need to specify the id of the button
     flex-direction: column;
     position: fixed;
     width: 100%;
+}
+
+#gameCanvas3dContainer button:hover
+{
+  background-color: #fff;
+  color: #000;
 }
