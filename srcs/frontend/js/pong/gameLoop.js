@@ -2,7 +2,7 @@ import { Ball } from './ball.js';
 import { Paddle } from './paddle.js';
 
 
-export function gameLoop(canvas, endGameCallback, player1Name = 'Player 1', player2Name = 'Player 2', isCpu = false) {
+export function gameLoop(canvas, endGameCallback, player1Name, player2Name, isCpu = false) {
 	const ctx = canvas.getContext('2d');
 	const ball = new Ball(canvas.width / 2, canvas.height / 2, 10, 4, 3, canvas);
 	const paddle1 = new Paddle(canvas, 10, 'w', 's');
@@ -19,7 +19,7 @@ export function gameLoop(canvas, endGameCallback, player1Name = 'Player 1', play
 	function updateScores() {
 		// i reduce the ball speed of 20%
 		if ((ball.speedX > 4 && ball.speedY > 3 ) || (-ball.speedX > 4 && -ball.speedY > 3) ){
-			console.log("%cSpeed decreased to: ", "color: red;", ball.speedX, ball.speedY);
+			// console.log("%cSpeed decreased to: ", "color: red;", ball.speedX, ball.speedY);
 			ball.speedX = ball.speedX < 0 ? -ball.speedX * 0.8 : ball.speedX * 0.8;
 			ball.speedY = ball.speedY < 0 ? -ball.speedY * 0.8 : ball.speedY * 0.8;
 		}

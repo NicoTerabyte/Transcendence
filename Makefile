@@ -1,7 +1,7 @@
 all : up
 
 up :
-	docker compose -f srcs/docker-compose.yml up --build -d
+	docker compose -f srcs/docker-compose.yml up --build 
 
 down :
 	docker compose -f srcs/docker-compose.yml down
@@ -18,7 +18,7 @@ clean :
 
 #clean the local volume binded to host folder
 lv-clean:
-	rm -rf /home/${USER}/Desktop/Transcendence/srcs/proxy/logs/*
+	sudo rm -rf /home/${USER}/Desktop/Transcendence/srcs/proxy/logs/*
 #	sudo rm -rf /home/${USER}/data/postgres/
 #	sudo rm -rf /home/${USER}/data/postgres_grafana/
 

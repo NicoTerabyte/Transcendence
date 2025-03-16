@@ -1,16 +1,21 @@
-const API_URL = 'http://127.0.0.1:8000';  // Ensure this matches your backend URL
-
 // Fetch all matches from the backend
+import { authService, tokenService } from "../services/authService.js";
 export async function fetchMatches() {
 	try {
-		const response = await fetch(`${API_URL}/api/users/`);
-		console.log("Fetch Response:", response);
+		const response = await fetch(`/api/tournament/users/`, {
+			method: 'GET',
+			headers: {
+				'Content-type' : 'application/json',
+				'Authorization': `Bearer ${tokenService.getAccessToken()}`
+			}
+		});
+		// console.log("Fetch Response:", response);
 		if (!response.ok) {
 			const errorData = await response.json();
 			throw new Error(errorData.error || 'Failed to fetch matches.');
 		}
 		const matches = await response.json();
-		console.log('Fetched Matches:', matches);
+		// console.log('Fetched Matches:', matches);
 		return matches;
 	} catch (error) {
 		console.error('Error fetching matches:', error);
@@ -22,11 +27,12 @@ export async function fetchMatches() {
 // Save users to the backend
 export async function saveUsers(names, afterSaveCallback) {
 	try {
-		console.log("Saving Users:", names);
-		const response = await fetch(`${API_URL}/api/users/save/`, {
+		// console.log("Saving Users:", names);
+		const response = await fetch(`/api/tournament/users/save/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${tokenService.getAccessToken()}`
 			},
 			body: JSON.stringify({ names }),
 		});
@@ -34,7 +40,7 @@ export async function saveUsers(names, afterSaveCallback) {
 			const errorData = await response.json();
 			throw new Error(errorData.error || 'Failed to save users.');
 		}
-		alert('Users saved successfully!');
+		// console.log('Users saved successfully!');
 
 		// HIDE tournament button & setup form after saving
 		const startTournamentBtn = document.getElementById('startTournamentButton');
@@ -52,10 +58,11 @@ export async function saveUsers(names, afterSaveCallback) {
 // Delete a user (loser) from the backend
 export async function deleteUser(loserName) {
 	try {
-		const response = await fetch(`${API_URL}/api/users/delete/`, {
+		const response = await fetch(`/api/tournament/users/delete/`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${tokenService.getAccessToken()}`
 			},
 			body: JSON.stringify({ names: [loserName] }),
 		});
@@ -66,7 +73,7 @@ export async function deleteUser(loserName) {
 		}
 
 		const remainingUsers = await response.json();
-		console.log('Remaining Users:', remainingUsers);
+		// console.log('Remaining Users:', remainingUsers);
 	} catch (error) {
 		console.error('Error deleting user:', error);
 		alert(`Failed to delete user: ${error.message}`);
@@ -75,35 +82,42 @@ export async function deleteUser(loserName) {
 
 export async function deleteAllUsers() {
 	try {
-		const response = await fetch(`${API_URL}/api/users/delete_all/`, {
+		const response = await fetch(`/api/tournament/users/delete_all/`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${tokenService.getAccessToken()}`
 			},
 		});
 		if (!response.ok) {
 			const errorData = await response.json();
 			throw new Error(errorData.error || 'Failed to delete all users.');
 		}
-		alert('All users were deleted successfully.');
+		// console.log('All users were deleted successfully.');
 		// Return a success flag
 		return true;
 	} catch (error) {
 		console.error('Error deleting all users:', error);
-		alert(`Failed to delete all users: ${error.message}`);
+		// alert(`Failed to delete all users: ${error.message}`);
 		return false;
 	}
 }
 
 export async function fetchAllUsers() {
 	try {
-		const response = await fetch(`${API_URL}/api/users/list/`);
+		const response = await fetch(`/api/tournament/users/list/`, {
+			method  : 'GET',
+			headers : {
+					'Content-type' : 'application/json',
+					'Authorization': `Bearer ${tokenService.getAccessToken()}`
+			},
+		});
 		if (!response.ok) {
 			const errorData = await response.json();
 			throw new Error(errorData.error || 'Failed to fetch all users.');
 		}
 		const users = await response.json();
-		console.log('Fetched All Users:', users);
+		// console.log('Fetched All Users:', users);
 		return users;
 	} catch (error) {
 		console.error('Error fetching all users:', error);

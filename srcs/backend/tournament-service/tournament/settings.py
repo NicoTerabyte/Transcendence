@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7rsuc(m^3(%fw@tv21fwv$l7j80um+i_d$57+roq2%7)a6nz#f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', 'tournament-service', '127.0.0.1', '0.0.0.0     ']
+ALLOWED_HOSTS = ['localhost', 'tournament-service']
 
 
 # Application definition
@@ -41,9 +41,13 @@ INSTALLED_APPS = [
     'corsheaders',
 	'rest_framework',
 	'api',
+	'watchman',
+	'django_prometheus',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware', # prometheus
+	'api.middleware.DatabaseConnectionMiddleware',#database middleware
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,6 +56,47 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django_prometheus.middleware.PrometheusAfterMiddleware', #prometheus
+]
+
+CORS_ALLOW_ALL_ORIGINS = False  # Not recommended in production, change after development
+
+CORS_ALLOW_CREDENTIALS = True # If you need to send cookies or authentication headers (e.g., for JWT)
+
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost",
+]
+
+
+# Allow specific headers
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Allow specific methods
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+
+#CSRF settings
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost',
 ]
 
 ROOT_URLCONF = 'tournament.urls'
@@ -78,21 +123,12 @@ WSGI_APPLICATION = 'tournament.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get("POSTGRES_TOURNAMENT_DB"),
 		'USER': os.environ.get("POSTGRES_USER"),
 		'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
-		#container_postgres for compose
-		#localhost if you're working on your own
 		'HOST': os.environ.get("POSTGRES_TOURNAMENT_HOST"),
 		'PORT': os.environ.get("POSTGRES_PORT"),
     }
@@ -142,15 +178,41 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",  # Add your front-end URL here
-#     "http://127.0.0.1:8000",
-# ]
+# settings.py (Django)
 
-CORS_ALLOW_ALL_ORIGINS = True  # Not recommended in production, change after development
+CSP_DEFAULT_SRC = ("'self'",)  # Fallback for unspecified directives
 
-CORS_ALLOW_CREDENTIALS = True # If you need to send cookies or authentication headers (e.g., for JWT)
+# Allow scripts from your domain, CDNs, and auth.42.fr
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "https://cdn.jsdelivr.net",
+    "https://auth.42.fr",
+    # Add "'unsafe-eval'" if Three.js requires it (check console)
+)
 
-CORS_ALLOWED_ORIGINS = [
-    #"https://localhost",
-]
+# Allow connections to your domain, blobs, and threejs.org
+CSP_CONNECT_SRC = (
+    "'self'",
+    "blob:",  # For blob: URLs (no quotes!)
+    "https://threejs.org",  # Allow fetching the font
+)
+
+# Allow fonts from your domain, data: URLs, and threejs.org
+CSP_FONT_SRC = (
+    "'self'",
+    "data:",
+    "https://threejs.org",  # Allow loading the font
+)
+
+# Allow images from self, data: URLs, and blobs
+CSP_IMG_SRC = (
+    "'self'",
+    "data:",
+    "blob:",
+)
+
+# Media sources (audio/video)
+CSP_MEDIA_SRC = ("'self'", "blob:")
+
+# Stylesheets
+CSP_STYLE_SRC = ("'self'",)

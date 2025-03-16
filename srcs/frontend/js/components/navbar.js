@@ -1,6 +1,8 @@
 import { navigateTo } from "../router.js";
+import { userService } from "../services/userService.js";
 
 export function Navbar() {
+  const userData = userService.getUserData();
   const navbar = document.createElement("nav");
   navbar.className = "navbar navbar-expand-lg bg-body-tertiary";
 
@@ -57,6 +59,7 @@ export function Navbar() {
     { name: "Home", route: "/" },
     { name: "Games", route: "/pong" },
     { name: "Friends", route: "/friends" },
+    { name: "Profile ", route: "/profile"}
   ];
 
   const menuItems = [
@@ -158,12 +161,13 @@ export function Navbar() {
   const avatarContainer = document.createElement("div");
   avatarContainer.className = "avatar-container";
 
-  const avatar = document.createElement("div");
+  const avatar = document.createElement("img");
   avatar.className = "avatar-circle";
+  avatar.src = userData.avatar;
   avatar.style.width = "40px";
   avatar.style.height = "40px";
   avatar.style.borderRadius = "50%";
-  avatar.style.backgroundColor = "ghostwhite";
+  avatar.style.objectFit = "cover";
   avatar.style.cursor = "pointer";
 
   const avatarTextContainer = document.createElement("div");

@@ -120,7 +120,7 @@ export function renderSignupPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/user/signup/', {
+      const response = await fetch('/api/user/signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,9 @@ export function renderSignupPage() {
 
       if (response.ok) {
         showAlert('Signup successful! Redirecting to login page...', 'success');
-        window.location.href = '/login';
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
       } else {
         // Handle different error cases
         if (data.username) {
